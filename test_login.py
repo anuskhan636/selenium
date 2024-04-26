@@ -1,13 +1,13 @@
-import pytest
 from selenium import webdriver
 
-@pytest.fixture
-def browser():
-    driver = webdriver.Chrome()
-    yield driver
-    driver.quit()
+# Initialize Chrome WebDriver
+driver = webdriver.Chrome()
 
-def test_login(browser):
-    browser.get("https://vativeapps.com")
-    # Your login test steps here
-    assert "Expected Title" in browser.title
+# Navigate to the website
+driver.get("https://vativeapps.com")
+
+# Take a screenshot
+driver.save_screenshot("screenshot.png")
+
+# Quit the WebDriver
+driver.quit()
