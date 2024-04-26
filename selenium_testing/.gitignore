@@ -1,0 +1,8 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# Selenium
+.pytest_cache/
+.vscode/
+*.log
