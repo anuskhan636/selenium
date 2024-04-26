@@ -1,4 +1,5 @@
 from selenium import webdriver
+import os
 
 # Initialize Chrome WebDriver
 driver = webdriver.Chrome()
@@ -7,7 +8,8 @@ driver = webdriver.Chrome()
 driver.get("https://vativeapps.com")
 
 # Take a screenshot
-driver.save_screenshot("screenshot.png")
+screenshot_path = os.path.join("allure-results", "screenshot.png")
+driver.save_screenshot(screenshot_path)
 
 # Quit the WebDriver
 driver.quit()
