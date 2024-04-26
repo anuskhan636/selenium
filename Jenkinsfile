@@ -13,7 +13,7 @@ pipeline {
         stage('Run Tests') {
             steps {
                 // Run the test script
-                sh 'python test_script.py'
+                sh 'pytest test_script.py --alluredir allure-results'
             }
         }
         
