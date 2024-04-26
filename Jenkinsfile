@@ -1,25 +1,29 @@
 pipeline {
     agent any
-
+    
     stages {
-        stage('Install dependencies') {
+        stage('Setup') {
             steps {
-                sh 'pip install -r requirements.txt'
+                // Install dependencies if needed
+                sh 'pip install selenium'
+                sh 'pip install allure-pytest'
             }
         }
-
-        stage('Run tests') {
+        
+        stage('Run Tests') {
             steps {
-                sh 'pytest --alluredir=reports'
+                // Run the test script
+                sh 'python test_script.py'
             }
         }
-
-        stage('Generate Allure report') {
+        
+        stage('Generate Allure Report') {
             steps {
+                // Generate Allure report
                 allure([
                     includeProperties: false,
                     jdk: '',
-                    results: [[path: 'reports']],
+                    results: [[path: 'allure-results']],
                     reportBuildPolicy: 'ALWAYS',
                     report: 'allure-report'
                 ])
