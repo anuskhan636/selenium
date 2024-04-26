@@ -29,7 +29,10 @@ pipeline {
 
         stage('Run Tests') {
             steps {
-                sh 'pytest tests' // Run tests using pytest (adjust the command for your test directory)
+                script {
+                    // Adjust the path to `allure-reports` if needed
+                    sh 'pytest -s -v test_login.py --alluredir="./allure-reports"'
+                }
             }
         }
 
