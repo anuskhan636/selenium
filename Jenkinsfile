@@ -1,32 +1,42 @@
 pipeline {
-    agent any
-    
-    stages {
-        stage('Setup') {
-            steps {
-                // Install dependencies if needed
-                sh 'pip install selenium'
-                sh 'pip install allure-pytest'
+    agent any  // Use any available agent
+
+    triggers {
+        scm { // Trigger on SCM (Git) changes
+            $class: 'GitSCM'
+            branches: '*/main' // Trigger on changes to the 'main' branch (adjust as needed)
+            doFirstMerge: true
+            extensions {
+                // Optional: Configure GitHub authentication (if needed)
+                // See https://jenkins.io/doc/book/pipeline/ SCM-Triggers.html#git-authentication for details
             }
         }
-        
+    }
+
+    stages {
+        stage('Checkout Code') {
+            steps {
+                git branch: 'main', // Checkout the 'main' branch (adjust as needed)
+                    url: 'https://github.com/anuskhan636/selenium.git' // Replace with your GitHub repository URL
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                sh 'pip install -r requirements.txt' // Install test dependencies
+            }
+        }
+
         stage('Run Tests') {
             steps {
-                // Run the test script
-                sh 'pytest test_script.py --alluredir allure-results'
+                sh 'pytest tests' // Run tests using pytest (adjust the command for your test directory)
             }
         }
-        
-        stage('Generate Allure Report') {
-            steps {
-                // Generate Allure report
-                allure([
-                    includeProperties: false,
-                    jdk: '',
-                    results: [[path: 'allure-results']],
-                    reportBuildPolicy: 'ALWAYS',
-                    report: 'allure-report'
-                ])
+
+        stage('Post-Build Actions') {
+            always {
+                // Archive test reports or artifacts (optional)
+                archiveArtifacts '**/*.xml' // Example: Archive all XML files
             }
         }
     }
